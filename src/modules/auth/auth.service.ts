@@ -4,7 +4,7 @@ import { LoginUserDto } from './dto/login.dto';
 import * as userService from '../user/user.service';
 import { CustomError } from '@/utils/custom_error';
 import { compare } from 'bcrypt';
-import { TokenDto } from './dto/create-token.dto';
+import { TokenDto } from './dto/token.dto';
 import { HttpStatus } from '@/utils/enums/http-status';
 
 export const login = async (userData: LoginUserDto) => {
@@ -12,6 +12,7 @@ export const login = async (userData: LoginUserDto) => {
     const user = await validateUser(userData);
     const payload: TokenDto = {
       uid: user.uid,
+      role: user.role,
     };
     return { ...(await jwtService.createTokenAsync(payload)) };
   } catch (error) {
@@ -27,6 +28,7 @@ export const register = async (userData: CreateUserDto) => {
     const user = await userService.createUser(userData);
     const payload: TokenDto = {
       uid: user.uid,
+      role: user.role,
     };
     return { ...(await jwtService.createTokenAsync(payload)) };
   } catch (error) {
@@ -62,6 +64,7 @@ export const refresh = async (refreshToken: string) => {
     }
     const tokens = await jwtService.createTokenAsync({
       uid: user.uid,
+      role: user.role,
     });
     await jwtService.removeToken(result[0]);
     return tokens;

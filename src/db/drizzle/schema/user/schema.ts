@@ -29,7 +29,10 @@ export const users = pgTable(
     phone: text('phone'),
     role: roleEnum('role').$type<RoleEnum>().default(RoleEnum.USER).notNull(),
     birthDate: date('birth_date'),
-    balance: integer('balance'),
+    // bug drizzle(
+    balance: integer('balance')
+      .notNull()
+      .$default(() => 0),
   },
   (table) => {
     return {

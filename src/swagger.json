@@ -15,6 +15,14 @@
     {
       "name": "User",
       "description": "User related endpoints"
+    },
+    {
+      "name": "Model",
+      "description": "Model related endpoints"
+    },
+    {
+      "name": "Transaction",
+      "description": "Transaction related endpoints"
     }
   ],
   "schemes": ["http"],
@@ -113,6 +121,225 @@
           }
         }
       }
+    },
+    "/user/transactions/all": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get all transactions",
+        "description": "Retrieves all transactions.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions retrieved successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/transactions/my": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get current user's transactions",
+        "description": "Retrieves all transactions of the authenticated user.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's transactions retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/transactions/info/{transactionUid}": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get transaction by UID",
+        "description": "Retrieves a transaction by its unique identifier.",
+        "parameters": [
+          {
+            "name": "transactionUid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction retrieved successfully"
+          },
+          "404": {
+            "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/transaction/make": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Create a new transaction",
+        "description": "Creates a new transaction.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "transaction",
+            "description": "Transaction creation data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateTransactionDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction created successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/model/all": {
+      "get": {
+        "tags": ["Model"],
+        "summary": "Get all models",
+        "description": "Retrieves all models.",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Models retrieved successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/model/one/{modelUid}": {
+      "get": {
+        "tags": ["Model"],
+        "summary": "Get model by UID",
+        "description": "Retrieves a model by its unique identifier.",
+        "parameters": [
+          {
+            "name": "modelUid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model retrieved successfully"
+          },
+          "404": {
+            "description": "Model not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/model/create": {
+      "post": {
+        "tags": ["Model"],
+        "summary": "Create a new model",
+        "description": "Creates a new model.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "model",
+            "description": "Model creation data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateModelDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model created successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/model/update": {
+      "put": {
+        "tags": ["Model"],
+        "summary": "Update model data",
+        "description": "Updates an existing model.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "model",
+            "description": "Model update data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateModelDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model updated successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/model/delete/{modelUid}": {
+      "delete": {
+        "tags": ["Model"],
+        "summary": "Delete a model",
+        "description": "Deletes a model by its unique identifier.",
+        "parameters": [
+          {
+            "name": "modelUid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model deleted successfully"
+          },
+          "404": {
+            "description": "Model not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -137,7 +364,7 @@
         "firstName": {
           "type": "string"
         },
-        "secondName": {
+        "lastName": {
           "type": "string"
         },
         "mail": {
@@ -154,7 +381,7 @@
           "type": "string"
         }
       },
-      "required": ["fullName", "mail", "role", "birthDate", "password"]
+      "required": ["firstName", "lastName", "mail", "role", "password"]
     },
     "LoginUserDto": {
       "type": "object",
@@ -170,6 +397,76 @@
         }
       },
       "required": ["password"]
+    },
+    "CreateModelDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "token_cost": {
+          "type": "number"
+        },
+        "api_link": {
+          "type": "string"
+        },
+        "auth_token": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "token_cost",
+        "api_link",
+        "auth_token"
+      ]
+    },
+    "UpdateModelDto": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "token_cost": {
+          "type": "number"
+        },
+        "api_link": {
+          "type": "string"
+        },
+        "auth_token": {
+          "type": "string"
+        }
+      },
+      "required": ["uid"]
+    },
+    "CreateTransactionDto": {
+      "type": "object",
+      "properties": {
+        "userUid": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["PURCHASE", "GENERATION_COST"]
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["userUid", "amount", "type"]
     }
   }
 }

@@ -1,21 +1,14 @@
 import { relations } from 'drizzle-orm';
-import { chat, generationSession, message, model } from './schema';
+import { chat, generationSession, message } from './schema';
 import { users } from '../user/schema';
+import { model } from '../model/schema';
 
 export const chatRelations = relations(chat, ({ one, many }) => ({
   user: one(users, {
     fields: [chat.userUid],
     references: [users.uid],
   }),
-  model: one(model, {
-    fields: [chat.modelUid],
-    references: [model.uid],
-  }),
   messages: many(message),
-}));
-
-export const modelRelations = relations(model, ({ many }) => ({
-  chat: many(chat),
 }));
 
 export const messageRelations = relations(message, ({ one }) => ({
@@ -26,6 +19,10 @@ export const messageRelations = relations(message, ({ one }) => ({
   session: one(generationSession, {
     fields: [message.chatUid],
     references: [generationSession.uid],
+  }),
+  model: one(model, {
+    fields: [message.modelUid],
+    references: [model.uid],
   }),
 }));
 
