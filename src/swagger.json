@@ -122,7 +122,7 @@
         }
       }
     },
-    "/user/transactions/all": {
+    "/transactions/all": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get all transactions",
@@ -142,7 +142,7 @@
         }
       }
     },
-    "/user/transactions/my": {
+    "/transactions/my": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get current user's transactions",
@@ -165,7 +165,7 @@
         }
       }
     },
-    "/user/transactions/info/{transactionUid}": {
+    "/transactions/info/{transactionUid}": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get transaction by UID",
@@ -191,7 +191,7 @@
         }
       }
     },
-    "/user/transaction/make": {
+    "/transaction/make": {
       "post": {
         "tags": ["Transaction"],
         "summary": "Create a new transaction",
