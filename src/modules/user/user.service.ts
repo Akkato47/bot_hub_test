@@ -20,18 +20,6 @@ export const getUserByUID = async (uid: string) => {
   }
 };
 
-export const getUserByOAuthId = async (id: string) => {
-  try {
-    const user = await db.select().from(users).where(eq(users.oAuthId, id));
-    return user[0];
-  } catch (error) {
-    if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
-      throw new CustomError(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    throw error;
-  }
-};
-
 export const getUserByLoginData = async (loginData: LoginUserDto) => {
   try {
     if (!loginData) {
@@ -69,10 +57,6 @@ export const createUser = async (createUserDto: CreateUserDto) => {
       .insert(users)
       .values({ ...createUserDto, password: hashPassword })
       .returning();
-    // FIXME Waiting for solving issue https://github.com/drizzle-team/drizzle-orm/issues/2694
-    // if (createUserDto.password) {
-    //     await db.update(users).set({ password: createUserDto.password });
-    // }
     return user[0];
   } catch (error) {
     if (error.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -92,8 +76,6 @@ export const getUserProfile = async (userUid: string) => {
         mail: users.mail,
         phone: users.phone,
         birthDate: users.birthDate,
-        image: users.image,
-        role: users.role,
       })
       .from(users)
       .where(eq(users.uid, userUid));

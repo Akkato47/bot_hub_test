@@ -93,7 +93,7 @@
     },
     "/user/profile": {
       "get": {
-        "tags": ["user"],
+        "tags": ["User"],
         "summary": "Get user profile",
         "description": "Retrieves the profile information of the authenticated user.",
         "security": [
@@ -126,22 +126,8 @@
     "ApiResponse": {
       "type": "object",
       "properties": {
-        "role": {
+        "message": {
           "type": "string"
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "uid": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "fileUrl": {
-              "type": "string"
-            }
-          }
         }
       }
     },
@@ -160,15 +146,11 @@
         "phone": {
           "type": "string"
         },
-        "role": {
-          "type": "string",
-          "enum": ["org", "user"]
-        },
         "password": {
           "type": "string"
         }
       },
-      "required": ["fullName", "mail", "role", "birthDate", "password"]
+      "required": ["fullName", "mail", "birthDate", "password"]
     },
     "LoginUserDto": {
       "type": "object",

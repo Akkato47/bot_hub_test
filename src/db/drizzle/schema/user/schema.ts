@@ -8,25 +8,18 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { Role } from './enums/role.enum';
 import { baseSchema } from '../base.schema';
-import { ImageType } from '@/modules/uploads/types/file.interface';
-
-export const roleEnum = pgEnum('role', ['ORG', 'USER', 'ADMIN', 'SU']);
 
 export const users = pgTable(
   'users',
   {
     ...baseSchema,
-    oAuthId: varchar('oauth_id', { length: 16 }).unique(),
     firstName: text('first_name').notNull(),
     secondName: text('second_name').notNull(),
     mail: text('email').notNull().unique(),
     password: text('password').notNull(),
     phone: text('phone'),
-    role: roleEnum('role').$type<Role>().default(Role.USER).notNull(),
     birthDate: date('birth_date'),
-    image: json('image').$type<ImageType>(),
   },
   (table) => {
     return {

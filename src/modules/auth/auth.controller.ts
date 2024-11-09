@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import * as authService from './auth.service';
 import { LoginUserDto } from './dto/login.dto';
-import { OAuthEnum } from './enums/oauth.enum';
 
 export async function register(
   req: Request<{}, {}, CreateUserDto>,
@@ -22,7 +21,7 @@ export async function register(
       httpOnly: true,
     });
 
-    return res.send(data.data).status(200);
+    return res.send({ message: 'ok' }).status(200);
   } catch (error) {
     next(error);
   }
@@ -46,7 +45,7 @@ export async function login(
       httpOnly: true,
     });
 
-    return res.send(data.data).status(200);
+    return res.send({ mesage: 'ok' }).status(200);
   } catch (error) {
     next(error);
   }
@@ -67,33 +66,9 @@ export async function logout(req: Request, res: Response, next: NextFunction) {
       return res.status(500).json({ message: 'Something went wrong' });
     }
 
-    await authService.logout(req.user.uid, req.user?.oAuthId);
+    await authService.logout(req.user.uid);
 
     return res.status(200).json({ message: 'ok' });
-  } catch (error) {
-    next(error);
-  }
-}
-
-export async function oAuth(
-  req: Request<{}, {}, { code: string; type: OAuthEnum }>,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const data = await authService.oAuth(req.body.code, req.body.type);
-
-    res.cookie('starter-access-token', data.token, {
-      expires: new Date(new Date().getTime() + 5 * 60 * 1000),
-      httpOnly: true,
-    });
-
-    res.cookie('starter-refresh-token', data.refresh, {
-      expires: new Date(new Date().getTime() + 30 * 60 * 60 * 1000),
-      httpOnly: true,
-    });
-
-    return res.send(data.data).status(200);
   } catch (error) {
     next(error);
   }

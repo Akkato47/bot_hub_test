@@ -9,11 +9,7 @@ export default {
     port: env.PORT || 8080,
   },
   cors: {
-    origin: [
-      'http://localhost:8080',
-      'http://127.0.0.1:8080',
-      env.CLIENT_BASE_URL,
-    ],
+    origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
     credentials: true,
   } as CorsOptions,
   database: {
@@ -44,24 +40,5 @@ export default {
       secret: env.JWT_PASSWORD_RESET_SECRET,
       expiresIn: '1d',
     },
-  },
-  bucket: {
-    key: env.BUCKET_KEY,
-    secret: env.BUCKET_SECRET,
-    name: env.BUCKET_NAME,
-    endpoint: env.BUCKET_ENDPOINT,
-  },
-  mail: {
-    host: env.MAIL_HOST,
-    user: env.MAIL_USER,
-    password: env.MAIL_PASSWORD,
-    from: env.MAIL_FROM,
-    port: env.MAIL_PORT,
-  },
-  yandexApi: {
-    clientID: env.YANDEX_CLIENT_ID,
-    clientSecret: env.YANDEX_CLIENT_SECRET,
-    tokenUrl: env.YANDEX_BASE_URL,
-    loginUrl: env.YANDEX_LOGIN_URL,
   },
 } as const;
