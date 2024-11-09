@@ -1,11 +1,4 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  text,
-  uuid,
-  varchar,
-} from 'drizzle-orm/pg-core';
+import { integer, pgEnum, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
 import { users } from '../user/schema';
 import { model } from '../model/schema';
@@ -20,7 +13,9 @@ export const messageRoleEnum = pgEnum('message_role_enum', ['user', 'system']);
 
 export const chat = pgTable('chat', {
   ...baseSchema,
-  userUid: uuid('user_uid').references(() => users.uid),
+  userUid: uuid('user_uid')
+    .references(() => users.uid)
+    .notNull(),
   total_token_used: integer('total_token_used').$default(() => 0),
   total_credit_spent: integer('total_credit_spent').$default(() => 0),
 });
@@ -37,7 +32,7 @@ export const message = pgTable('message', {
   modelUid: uuid('model_uid').references(() => model.uid),
 });
 
-export type InserMessage = typeof message.$inferInsert;
+export type InsertMessage = typeof message.$inferInsert;
 export type SelectMessage = typeof message.$inferSelect;
 
 export const generationSession = pgTable('generation_session', {
