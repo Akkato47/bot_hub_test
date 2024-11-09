@@ -146,11 +146,15 @@
         "phone": {
           "type": "string"
         },
+        "role": {
+          "type": "string",
+          "enum": ["ADMIN", "USER"]
+        },
         "password": {
           "type": "string"
         }
       },
-      "required": ["fullName", "mail", "birthDate", "password"]
+      "required": ["fullName", "mail", "role", "birthDate", "password"]
     },
     "LoginUserDto": {
       "type": "object",

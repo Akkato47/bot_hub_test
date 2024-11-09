@@ -1,6 +1,6 @@
 import {
   date,
-  json,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -9,17 +9,27 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
+import { RoleEnum } from './enums/role.enum';
+import { TransactionEnum } from './enums/transaction.enum';
+
+export const roleEnum = pgEnum('role_enum', ['USER', 'ADMIN']);
+export const transactionEnum = pgEnum('transaction_enum', [
+  'PURCHASE',
+  'GENERATION_COST',
+]);
 
 export const users = pgTable(
   'users',
   {
     ...baseSchema,
     firstName: text('first_name').notNull(),
-    secondName: text('second_name').notNull(),
+    lastName: text('second_name').notNull(),
     mail: text('email').notNull().unique(),
     password: text('password').notNull(),
     phone: text('phone'),
+    role: roleEnum('role').$type<RoleEnum>().default(RoleEnum.USER).notNull(),
     birthDate: date('birth_date'),
+    balance: integer('balance'),
   },
   (table) => {
     return {
@@ -32,7 +42,13 @@ export const users = pgTable(
 export type InsertUser = typeof users.$inferInsert;
 export type SelectUser = typeof users.$inferSelect;
 
-export const userProfleInfo = pgTable('user_profle_info', {
+export const transaction = pgTable('transactions', {
   ...baseSchema,
   userUid: uuid('user_uid').references(() => users.uid),
+  amount: integer('amount').notNull(),
+  type: transactionEnum('type').$type<TransactionEnum>().notNull(),
+  description: varchar('description', { length: 255 }).notNull(),
 });
+
+export type InsertTransaction = typeof transaction.$inferInsert;
+export type SelectTransaction = typeof transaction.$inferSelect;

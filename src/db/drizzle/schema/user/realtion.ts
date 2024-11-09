@@ -1,9 +1,15 @@
 import { relations } from 'drizzle-orm';
-import { userProfleInfo, users } from './schema';
+import { transaction, users } from './schema';
+import { chat } from '../chat/schema';
 
-export const userRelations = relations(users, ({ one }) => ({
-  userProfleInfo: one(userProfleInfo, {
-    fields: [users.uid],
-    references: [userProfleInfo.userUid],
+export const userRelations = relations(users, ({ many }) => ({
+  transaction: many(transaction),
+  chat: many(chat),
+}));
+
+export const transactionRelations = relations(transaction, ({ one }) => ({
+  user: one(users, {
+    fields: [transaction.userUid],
+    references: [users.uid],
   }),
 }));

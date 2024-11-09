@@ -72,9 +72,10 @@ export const getUserProfile = async (userUid: string) => {
       .select({
         uid: users.uid,
         firstName: users.firstName,
-        secondName: users.secondName,
+        secondName: users.lastName,
         mail: users.mail,
         phone: users.phone,
+        role: users.role,
         birthDate: users.birthDate,
       })
       .from(users)
