@@ -1,12 +1,10 @@
 import { db } from '@/db/drizzle/connect';
-import { chat, message, SelectMessage } from '@/db/drizzle/schema/chat/schema';
-import { logger } from '@/lib/loger';
+import { chat, message } from '@/db/drizzle/schema/chat/schema';
 import { CreateMessageDto } from './dto/message.dto';
 import OpenAI from 'openai';
 import { model } from '@/db/drizzle/schema/model/schema';
-import { eq, TransactionRollbackError } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { users } from '@/db/drizzle/schema/user/schema';
-import { createTransaction } from '../transaction/transaction.service';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
 import { MessageRoleEnum } from '@/db/drizzle/schema/chat/enum/message-role.enum';
 import { CustomError } from '@/utils/custom_error';
@@ -112,7 +110,6 @@ export const processMessage = async (dto: CreateMessageDto) => {
           assistantMessage: assistantMessage[0],
         };
       } catch (error) {
-        logger.error(error);
         return {
           userMessage: userMessage[0],
         };

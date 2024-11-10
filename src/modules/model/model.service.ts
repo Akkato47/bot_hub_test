@@ -1,10 +1,7 @@
-import { HttpStatus } from '@/utils/enums/http-status';
 import { CreateModelDto, UpdateModelDto } from './dto/model.dto';
-import { CustomError } from '@/utils/custom_error';
 import { db } from '@/db/drizzle/connect';
 import { model } from '@/db/drizzle/schema/model/schema';
-import { eq, ne } from 'drizzle-orm';
-import { logger } from '@/lib/loger';
+import { eq } from 'drizzle-orm';
 
 export const createModel = async (dto: CreateModelDto) => {
   try {

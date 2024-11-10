@@ -1,9 +1,5 @@
 import { CustomError } from '@/utils/custom_error';
 import { Request, Response, NextFunction } from 'express';
-import token from '@/modules/auth/lib/token';
-import { refresh } from '@/modules/auth/auth.service';
-import { extractAccessTokenFromCookie } from './lib/extractAccessTokenFromCookie';
-import { extractRefreshTokenFromCookie } from './lib/extractRefreshTokenFromCookie';
 import { RoleEnum } from '@/db/drizzle/schema/user/enums/role.enum';
 import { HttpStatus } from '@/utils/enums/http-status';
 import { logger } from '@/lib/loger';

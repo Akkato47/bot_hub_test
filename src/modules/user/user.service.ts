@@ -7,7 +7,6 @@ import { CustomError } from '@/utils/custom_error';
 import { hash } from 'bcrypt';
 import type { LoginUserDto } from '../auth/dto/login.dto';
 import { HttpStatus } from '@/utils/enums/http-status';
-import { logger } from '@/lib/loger';
 
 export const getUserByUID = async (uid: string) => {
   try {

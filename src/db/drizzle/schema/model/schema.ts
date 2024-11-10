@@ -1,4 +1,4 @@
-import { pgTable, integer, varchar, real } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, real } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
 import { ChatModel } from 'openai/resources';
 

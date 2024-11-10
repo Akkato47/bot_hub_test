@@ -1,8 +1,7 @@
 import { db } from '@/db/drizzle/connect';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
 import { users } from '@/db/drizzle/schema/user/schema';
-import { logger } from '@/lib/loger';
-import { eq, TransactionRollbackError } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { CreateTransactionDto } from './dto/transactions.dto';
 import { transaction } from '@/db/drizzle/schema/transaction/schema';
 import { CustomError } from '@/utils/custom_error';
