@@ -86,7 +86,7 @@ Below is the recommended workflow to start interacting with the application via 
     "lastName": "Doe",
     "mail": "john.doe@example.com",
     "phone": "1234567890",
-    "role": "USER",
+    "role": "ADMIN",
     "password": "securepassword"
   }
   ```
