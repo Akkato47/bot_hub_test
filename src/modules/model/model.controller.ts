@@ -16,6 +16,20 @@ export async function createModel(
   }
 }
 
+export async function getChatModels(
+  req: Request<{}, {}, {}>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await modelService.getAllAvailableModelTypes();
+
+    return res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getModels(
   req: Request<{}, {}, {}>,
   res: Response,

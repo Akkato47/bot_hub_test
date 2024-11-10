@@ -3,6 +3,7 @@ import {
   integer,
   pgEnum,
   pgTable,
+  real,
   text,
   uuid,
 } from 'drizzle-orm/pg-core';
@@ -28,8 +29,8 @@ export const chat = pgTable('chat', {
   userUid: uuid('user_uid')
     .references(() => users.uid)
     .notNull(),
-  total_token_used: integer('total_token_used').$default(() => 0),
-  total_credit_spent: integer('total_credit_spent').$default(() => 0),
+  total_token_used: real('total_token_used').$default(() => 0),
+  total_credit_spent: real('total_credit_spent').$default(() => 0),
 });
 
 export type InsertChat = typeof chat.$inferInsert;
@@ -45,8 +46,8 @@ export const message = pgTable('message', {
   modelUid: uuid('model_uid')
     .references(() => model.uid)
     .notNull(),
-  token_used: integer('token_used'),
-  creditSpent: integer('credit_spent'),
+  token_used: real('token_used').$default(() => 0.0),
+  creditSpent: real('credit_spent').$default(() => 0.0),
   sentStatus: boolean('sent_status').$default(() => false),
 });
 

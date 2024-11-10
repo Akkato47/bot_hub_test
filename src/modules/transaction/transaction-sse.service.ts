@@ -34,7 +34,6 @@ export const settingBalanceSSE = async (req: Request, res: Response) => {
     };
 
     req.on('close', () => {
-      console.log('SSE connection closed');
       transactionSseService.off('new_transaction', () => {});
       res.end();
     });

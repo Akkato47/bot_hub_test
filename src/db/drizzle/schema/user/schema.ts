@@ -1,11 +1,4 @@
-import {
-  date,
-  integer,
-  pgEnum,
-  pgTable,
-  text,
-  unique,
-} from 'drizzle-orm/pg-core';
+import { date, pgEnum, pgTable, real, text, unique } from 'drizzle-orm/pg-core';
 import { baseSchema } from '../base.schema';
 import { RoleEnum } from './enums/role.enum';
 
@@ -22,7 +15,7 @@ export const users = pgTable(
     phone: text('phone'),
     role: roleEnum('role').$type<RoleEnum>().default(RoleEnum.USER).notNull(),
     birthDate: date('birth_date'),
-    balance: integer('balance')
+    balance: real('balance')
       .notNull()
       .$default(() => 0),
   },

@@ -14,7 +14,6 @@ export const getUserByUID = async (uid: string) => {
     const user = await db.select().from(users).where(eq(users.uid, uid));
     return user[0];
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -32,7 +31,6 @@ export const getUserByLoginData = async (loginData: LoginUserDto) => {
       );
     return user[0];
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -56,7 +54,6 @@ export const createUser = async (createUserDto: CreateUserDto) => {
       .returning();
     return user[0];
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -82,7 +79,6 @@ export const getUserProfile = async (userUid: string) => {
 
     return data[0];
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };

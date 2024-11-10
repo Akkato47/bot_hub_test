@@ -4,20 +4,20 @@ import { logger } from '@/lib/loger';
 import { CreateMessageDto } from './dto/message.dto';
 import OpenAI from 'openai';
 import { model } from '@/db/drizzle/schema/model/schema';
-import { eq } from 'drizzle-orm';
+import { eq, TransactionRollbackError } from 'drizzle-orm';
 import { users } from '@/db/drizzle/schema/user/schema';
 import { createTransaction } from '../transaction/transaction.service';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
 import { MessageRoleEnum } from '@/db/drizzle/schema/chat/enum/message-role.enum';
 import { CustomError } from '@/utils/custom_error';
 import { HttpStatus } from '@/utils/enums/http-status';
+import { transactionSseService } from '../transaction/transaction-sse.service';
 
 export const getChats = async (userUid: string) => {
   try {
     const chats = await db.select().from(chat).where(eq(chat.userUid, userUid));
     return chats;
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -39,9 +39,6 @@ export const processMessage = async (dto: CreateMessageDto) => {
 
         if (user[0].balance <= 0) {
           tx.rollback();
-          return {
-            userMessage: userMessage[0],
-          };
         }
         const selectedModel = await tx
           .select()
@@ -65,25 +62,22 @@ export const processMessage = async (dto: CreateMessageDto) => {
             ...messageResult,
             { role: 'user', content: dto.message },
           ],
-          model: 'gpt-3.5-turbo',
+          model: selectedModel[0].type,
         });
 
         if (answer.choices[0].finish_reason === 'length') {
           tx.rollback();
-          return {
-            userMessage: userMessage[0],
-          };
         }
 
-        const creditSpent =
-          answer.usage.total_tokens / selectedModel[0].token_cost;
-        await createTransaction({
+        const creditSpent = Number(
+          (answer.usage.total_tokens / selectedModel[0].token_cost).toFixed(2)
+        );
+        await transactionSseService.makeTransaction({
           amount: creditSpent,
           description: 'Model usage',
           type: TransactionEnum.GENERATION_COST,
           userUid: user[0].uid,
         });
-
         await tx
           .update(chat)
           .set({
@@ -119,7 +113,6 @@ export const processMessage = async (dto: CreateMessageDto) => {
         };
       } catch (error) {
         logger.error(error);
-        tx.rollback();
         return {
           userMessage: userMessage[0],
         };
@@ -131,7 +124,6 @@ export const processMessage = async (dto: CreateMessageDto) => {
 
     return result;
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -146,7 +138,6 @@ export const getMessageHistory = async (chatUid: string) => {
 
     return result;
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };

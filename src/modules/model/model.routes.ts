@@ -5,6 +5,12 @@ import { isAdmin } from '@/middleware/role.middleware';
 
 const router = Router();
 
+router.get(
+  '/types/all',
+  isAuthenticated,
+  isAdmin,
+  modelController.getChatModels
+);
 router.get('/all', isAuthenticated, modelController.getModels);
 router.get('/one/:modelUid', isAuthenticated, modelController.getModelByUid);
 

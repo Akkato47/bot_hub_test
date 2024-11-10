@@ -2,9 +2,11 @@ import { db } from '@/db/drizzle/connect';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
 import { users } from '@/db/drizzle/schema/user/schema';
 import { logger } from '@/lib/loger';
-import { eq } from 'drizzle-orm';
+import { eq, TransactionRollbackError } from 'drizzle-orm';
 import { CreateTransactionDto } from '../user/dto/transactions.dto';
 import { transaction } from '@/db/drizzle/schema/transaction/schema';
+import { CustomError } from '@/utils/custom_error';
+import { HttpStatus } from '@/utils/enums/http-status';
 
 export const createTransaction = async (dto: CreateTransactionDto) => {
   try {
@@ -20,7 +22,6 @@ export const createTransaction = async (dto: CreateTransactionDto) => {
           .where(eq(users.uid, dto.userUid));
         if (user.length === 0) {
           tx.rollback();
-          return null;
         }
         if (dto.type === TransactionEnum.PURCHASE) {
           const newBalance = user[0].balance + dto.amount;
@@ -39,15 +40,14 @@ export const createTransaction = async (dto: CreateTransactionDto) => {
           };
         }
       } catch (error) {
-        logger.error;
-        tx.rollback();
         return null;
       }
     });
-
+    if (!result) {
+      throw new CustomError(HttpStatus.BAD_REQUEST, 'Unexpected error');
+    }
     return result;
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -60,7 +60,6 @@ export const getAllTransactions = async () => {
       data,
     };
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -76,7 +75,6 @@ export const getAllTransactionsByUserUid = async (userUid: string) => {
       data,
     };
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -92,7 +90,6 @@ export const getTransactionsByUid = async (transactionUid: string) => {
       data,
     };
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
@@ -106,7 +103,6 @@ export const getBalanceByUserUid = async (userUid: string) => {
 
     return result[0];
   } catch (error) {
-    logger.error(error);
     throw error;
   }
 };
