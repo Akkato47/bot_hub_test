@@ -1,4 +1,5 @@
 export enum MessageRoleEnum {
   USER = 'user',
-  SYSTEM = 'systems',
+  SYSTEM = 'system',
+  ASSISTANT = 'assistant',
 }
