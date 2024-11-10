@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import * as transactionService from './transaction.service';
-import { CreateTransactionDto } from '../user/dto/transactions.dto';
+import { CreateTransactionDto } from './dto/transactions.dto';
 import * as transactionSseService from './transaction-sse.service';
 
 export async function setBalanceSSE(

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import EventEmitter from 'events';
 import { logger } from '@/lib/loger';
-import { CreateTransactionDto } from '../user/dto/transactions.dto';
+import { CreateTransactionDto } from './dto/transactions.dto';
 import { createTransaction, getBalanceByUserUid } from './transaction.service';
 
 class TransactionSseService extends EventEmitter {
