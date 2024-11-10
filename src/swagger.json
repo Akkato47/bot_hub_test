@@ -23,6 +23,10 @@
     {
       "name": "Transaction",
       "description": "Transaction related endpoints"
+    },
+    {
+      "name": "Chat",
+      "description": "Chat related endpoints"
     }
   ],
   "schemes": ["http"],
@@ -122,7 +126,22 @@
         }
       }
     },
-    "/transactions/all": {
+    "/transaction/balance-sse": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Open an SSE connection for the balance",
+        "description": "Establishes an SSE connection to receive updates for balance.",
+        "responses": {
+          "200": {
+            "description": "SSE connection opened successfully for balance."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/transaction/all": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get all transactions",
@@ -142,7 +161,7 @@
         }
       }
     },
-    "/transactions/my": {
+    "/transaction/my": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get current user's transactions",
@@ -165,7 +184,7 @@
         }
       }
     },
-    "/transactions/info/{transactionUid}": {
+    "/transaction/info/{transactionUid}": {
       "get": {
         "tags": ["Transaction"],
         "summary": "Get transaction by UID",
@@ -340,6 +359,96 @@
           }
         }
       }
+    },
+    "/chat/sse/{chatUid}": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "Open an SSE connection for a specific chat",
+        "description": "Establishes an SSE connection for receiving updates for a specific chat using chat UID.",
+        "parameters": [
+          {
+            "name": "chatUid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier of the chat."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSE connection opened successfully for chat."
+          },
+          "404": {
+            "description": "Chat not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat/sse": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "Open an SSE connection for the chat list",
+        "description": "Establishes an SSE connection to receive updates for all chats.",
+        "responses": {
+          "200": {
+            "description": "SSE connection opened successfully for chat list."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/chat/message": {
+      "post": {
+        "tags": ["Chat"],
+        "summary": "Send a message in a chat",
+        "description": "Sends a message to a specific chat.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "description": "Message data for the chat.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateMessageDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message sent successfully."
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/chat/create": {
+      "post": {
+        "tags": ["Chat"],
+        "summary": "Create a new chat",
+        "description": "Creates a new chat for the authenticated user.",
+        "responses": {
+          "200": {
+            "description": "Chat created successfully."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -467,6 +576,29 @@
         }
       },
       "required": ["userUid", "amount", "type"]
+    },
+    "CreateMessageDto": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": ["user", "system", "assistant"],
+          "description": "Role of the message sender (user, system, assistant)."
+        },
+        "message": {
+          "type": "string",
+          "description": "Content of the message."
+        },
+        "chatUid": {
+          "type": "string",
+          "description": "Unique identifier of the chat."
+        },
+        "modelUid": {
+          "type": "string",
+          "description": "Unique identifier of the model to use."
+        }
+      },
+      "required": ["role", "message", "chatUid", "modelUid"]
     }
   }
 }

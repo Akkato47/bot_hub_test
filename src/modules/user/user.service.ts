@@ -1,15 +1,13 @@
 import { eq, or } from 'drizzle-orm';
 
 import { db } from '@/db/drizzle/connect';
-import { transaction, users } from '@/db/drizzle/schema/user/schema';
+import { users } from '@/db/drizzle/schema/user/schema';
 import type { CreateUserDto } from './dto/create-user.dto';
 import { CustomError } from '@/utils/custom_error';
 import { hash } from 'bcrypt';
 import type { LoginUserDto } from '../auth/dto/login.dto';
 import { HttpStatus } from '@/utils/enums/http-status';
-import { CreateTransactionDto } from './dto/transactions.dto';
 import { logger } from '@/lib/loger';
-import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
 
 export const getUserByUID = async (uid: string) => {
   try {
