@@ -5,25 +5,23 @@ import * as transactionController from './transaction.controller';
 const router = Router();
 
 router.get(
-  '/transactions/all',
+  '/balance-sse',
   isAuthenticated,
-  transactionController.getAllTransactions
+  transactionController.setBalanceSSE
 );
+
+router.get('/all', isAuthenticated, transactionController.getAllTransactions);
 router.get(
-  '/transactions/my',
+  '/my',
   isAuthenticated,
   transactionController.getAllTransactionsByUserUid
 );
 router.get(
-  '/transactions/info/:transactionUid',
+  '/info/:transactionUid',
   isAuthenticated,
   transactionController.getTransactionByUid
 );
 
-router.post(
-  '/transaction/make',
-  isAuthenticated,
-  transactionController.createTransaction
-);
+router.post('/make', isAuthenticated, transactionController.createTransaction);
 
 export default router;

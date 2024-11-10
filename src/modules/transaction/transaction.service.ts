@@ -1,9 +1,10 @@
 import { db } from '@/db/drizzle/connect';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
-import { transaction, users } from '@/db/drizzle/schema/user/schema';
+import { users } from '@/db/drizzle/schema/user/schema';
 import { logger } from '@/lib/loger';
 import { eq } from 'drizzle-orm';
 import { CreateTransactionDto } from '../user/dto/transactions.dto';
+import { transaction } from '@/db/drizzle/schema/transaction/schema';
 
 export const createTransaction = async (dto: CreateTransactionDto) => {
   try {
@@ -25,6 +26,7 @@ export const createTransaction = async (dto: CreateTransactionDto) => {
           const newBalance = user[0].balance + dto.amount;
           await db.update(users).set({ balance: newBalance }).execute();
           return {
+            newBalance,
             transactionUid: transactionResult[0].uid,
           };
         }
@@ -32,6 +34,7 @@ export const createTransaction = async (dto: CreateTransactionDto) => {
           const newBalance = user[0].balance - dto.amount;
           await db.update(users).set({ balance: newBalance }).execute();
           return {
+            newBalance,
             transactionUid: transactionResult[0].uid,
           };
         }
@@ -88,6 +91,20 @@ export const getTransactionsByUid = async (transactionUid: string) => {
     return {
       data,
     };
+  } catch (error) {
+    logger.error(error);
+    throw error;
+  }
+};
+
+export const getBalanceByUserUid = async (userUid: string) => {
+  try {
+    const result = await db
+      .select({ balance: users.balance })
+      .from(users)
+      .where(eq(users.uid, userUid));
+
+    return result[0];
   } catch (error) {
     logger.error(error);
     throw error;

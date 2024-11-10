@@ -2,6 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 
 import * as transactionService from './transaction.service';
 import { CreateTransactionDto } from '../user/dto/transactions.dto';
+import * as transactionSseService from './transaction-sse.service';
+
+export async function setBalanceSSE(
+  req: Request<{ chatUid: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result = await transactionSseService.settingBalanceSSE(req, res);
+    return result;
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function getAllTransactions(
   req: Request,
@@ -52,7 +66,10 @@ export async function createTransaction(
   next: NextFunction
 ) {
   try {
-    const result = await transactionService.createTransaction(req.body);
+    const result =
+      await transactionSseService.transactionSseService.makeTransaction(
+        req.body
+      );
     return res.status(200).json(result);
   } catch (error) {
     next(error);
