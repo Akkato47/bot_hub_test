@@ -20,8 +20,8 @@ Implemented features in the project:
 - [x] Redis.
 - [x] Dockerfile and Docker Compose.
 - [x] Database schemas ready.
-- [ ] Connected with bothub API.
-- [ ] Configured Swagger.
+- [x] Connected with bothub API.
+- [x] Configured Swagger.
 
 ## 📦 Installation
 
