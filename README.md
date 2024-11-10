@@ -41,18 +41,16 @@ Create a `.env` file in the root folder of the project and fill it with the valu
 ```env
 PORT=8000
 NODE_ENV=dev
-CLIENT_BASE_URL=http://localhost:5173
 
 DATABASE_HOST=127.0.0.1
 DATABASE_PORT=5432
 DATABASE_USER=postgres
-DATABASE_PASSWORD=your_database_password
-DATABASE_NAME=starter
-DATABASE_URL=postgresql://your_database_user:your_database_password@127.0.0.1:5432/starter
+DATABASE_PASSWORD=1234
+DATABASE_NAME=bothub
+DATABASE_URL=postgresql://postgres:1234@127.0.0.1:5432/bothub
 
-JWT_ACCESS_SECRET=your_jwt_access_secret
-JWT_REFRESH_SECRET=your_jwt_refresh_secret
-JWT_PASSWORD_RESET_SECRET=your_jwt_password_reset_secret
+JWT_ACCESS_SECRET=secret1
+JWT_REFRESH_SECRET=secret2
 
 REDIS_PORT=6379
 REDIS_PASSWORD=your_redis_password
