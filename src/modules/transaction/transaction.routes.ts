@@ -1,6 +1,7 @@
 import { isAuthenticated } from '@/middleware/auth.middleware';
 import { Router } from 'express';
 import * as transactionController from './transaction.controller';
+import { isAdmin } from '@/middleware/role.middleware';
 
 const router = Router();
 
@@ -10,7 +11,12 @@ router.get(
   transactionController.setBalanceSSE
 );
 
-router.get('/all', isAuthenticated, transactionController.getAllTransactions);
+router.get(
+  '/all',
+  isAuthenticated,
+  isAdmin,
+  transactionController.getAllTransactions
+);
 router.get(
   '/my',
   isAuthenticated,
@@ -22,6 +28,16 @@ router.get(
   transactionController.getTransactionByUid
 );
 
-router.post('/make', isAuthenticated, transactionController.createTransaction);
+router.post(
+  '/make',
+  isAuthenticated,
+  isAdmin,
+  transactionController.createTransaction
+);
+router.post(
+  '/my/make',
+  isAuthenticated,
+  transactionController.createTransaction
+);
 
 export default router;

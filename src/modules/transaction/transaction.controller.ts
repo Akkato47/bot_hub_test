@@ -75,3 +75,20 @@ export async function createTransaction(
     next(error);
   }
 }
+
+export async function createTransactionToMe(
+  req: Request<{}, {}, CreateTransactionDto>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const result =
+      await transactionSseService.transactionSseService.makeTransaction({
+        ...req.body,
+        userUid: req.user.uid,
+      });
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}

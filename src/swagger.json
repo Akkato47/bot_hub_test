@@ -236,6 +236,32 @@
         }
       }
     },
+    "/transaction/my/make": {
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Create a new transaction to my account",
+        "description": "Creates a new transaction.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "transaction",
+            "description": "Transaction creation data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateMyTransactionDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction created successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/model/types/all": {
       "get": {
         "tags": ["Model"],
@@ -622,6 +648,22 @@
         "userUid": {
           "type": "string"
         },
+        "amount": {
+          "type": "number"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["PURCHASE", "GENERATION_COST"]
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["userUid", "amount", "type"]
+    },
+    "CreateMyTransactionDto": {
+      "type": "object",
+      "properties": {
         "amount": {
           "type": "number"
         },
