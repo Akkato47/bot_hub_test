@@ -1,5 +1,5 @@
+import { InsertTransaction } from '@/db/drizzle/schema/transaction/schema';
 import { TransactionEnum } from '@/db/drizzle/schema/user/enums/transaction.enum';
-import { InsertTransaction } from '@/db/drizzle/schema/user/schema';
 
 export class CreateTransactionDto implements InsertTransaction {
   userUid!: string;
