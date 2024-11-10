@@ -155,7 +155,7 @@ Below is the recommended workflow to start interacting with the application via 
   ```json
   {
     "role": "user",
-    "message": "Hello, how can I assist you today?",
+    "message": "Hello, how much will it be 2+2?",
     "chatUid": "unique_chat_uid",
     "modelUid": "unique_model_uid"
   }
