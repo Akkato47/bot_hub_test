@@ -37,7 +37,7 @@ router.post(
 router.post(
   '/my/make',
   isAuthenticated,
-  transactionController.createTransaction
+  transactionController.createTransactionToMe
 );
 
 export default router;
